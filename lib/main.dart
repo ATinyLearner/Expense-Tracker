@@ -1,7 +1,4 @@
-import 'file:///D:/Programming/FlutterProjects/expense_tracker/lib/widgets/new_transaction.dart';
-import 'package:expense_tracker/widgets/user_transactions.dart';
-
-import 'widgets/transaction_list.dart';
+import 'widgets/user_transactions.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -27,18 +24,20 @@ class MyHomePage extends StatelessWidget {
         centerTitle: true,
         title: Text('Expense Tracker'),
       ),
-      body: Column(
-        //mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            child: Card(
-              child: Text('Chart'),
-              elevation: 5,
+      body: SingleChildScrollView(
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              child: Card(
+                child: Text('Chart'),
+                elevation: 5,
+              ),
             ),
-          ),
-          UserTransactions(),
-        ],
+            UserTransactions(),
+          ],
+        ),
       ),
     );
   }
