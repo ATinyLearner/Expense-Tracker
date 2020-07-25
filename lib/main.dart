@@ -1,5 +1,6 @@
 import 'package:expense_tracker/widgets/new_transaction.dart';
 import 'package:expense_tracker/widgets/transaction_list.dart';
+import 'package:google_fonts/google_fonts.dart';
 import './models/transaction.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        primaryTextTheme: TextTheme(
+          headline1: GoogleFonts.lobster(fontSize: 30),
+          bodyText1: GoogleFonts.notoSerif(
+            fontSize: 20,
+            color: Theme.of(context).primaryColor,
+            fontWeight: FontWeight.bold,
+          ),
+          bodyText2: GoogleFonts.merriweatherSans(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 17,
+          ),
+        ),
         primaryColor: Color(0xff2749D8),
         accentColor: Color(0xff526DE0),
       ),
@@ -75,7 +89,10 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         centerTitle: true,
-        title: Text('Expense Tracker'),
+        title: Text(
+          'Expense Tracker',
+          style: Theme.of(context).primaryTextTheme.headline1,
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
