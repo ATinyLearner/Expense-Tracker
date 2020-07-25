@@ -1,11 +1,32 @@
-import 'package:expense_tracker/widgets/user_transactions.dart';
 import 'package:flutter/material.dart';
 
-class NewTransaction extends StatelessWidget {
+class NewTransaction extends StatefulWidget {
   final Function addTx;
+
+  NewTransaction(this.addTx);
+
+  @override
+  _NewTransactionState createState() => _NewTransactionState();
+}
+
+class _NewTransactionState extends State<NewTransaction> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
-  NewTransaction(this.addTx);
+
+  void submitData() {
+    final enteredTitle = titleController.text;
+    final enteredAmount = double.parse(amountController.text);
+    if (enteredTitle.isEmpty || enteredAmount <= 0) {
+      return;
+    }
+    widget.addTx(
+      enteredTitle,
+      enteredAmount,
+    );
+    //This is used to close the current screen!
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -16,26 +37,32 @@ class NewTransaction extends StatelessWidget {
           children: <Widget>[
             TextField(
               controller: titleController,
-              cursorColor: Colors.blue,
+              cursorColor: Theme.of(context).primaryColor,
               decoration: InputDecoration(
                 labelText: 'Title',
               ),
             ),
             TextField(
+              keyboardType: TextInputType.number,
               controller: amountController,
-              cursorColor: Colors.blue,
+              cursorColor: Theme.of(context).accentColor,
               decoration: InputDecoration(
                 labelText: 'Amount',
               ),
+              onSubmitted: (_) {
+                submitData();
+              },
             ),
             FlatButton(
               onPressed: () {
-                addTx(
-                  titleController.text,
-                  double.parse(amountController.text),
-                );
+                submitData();
               },
-              child: Text('Add'),
+              child: Text(
+                'ADD',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
             ),
           ],
         ),
