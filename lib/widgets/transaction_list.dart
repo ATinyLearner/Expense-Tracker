@@ -14,7 +14,7 @@ class TransactionList extends StatelessWidget {
               children: <Widget>[
                 Text(
                   'It is empty.',
-                  style: Theme.of(context).primaryTextTheme.bodyText1,
+                  style: Theme.of(context).primaryTextTheme.bodyText2,
                 ),
                 SizedBox(
                   height: 30,
@@ -31,7 +31,7 @@ class TransactionList extends StatelessWidget {
                 ),
                 Text(
                   'Add some Transaction!',
-                  style: Theme.of(context).primaryTextTheme.bodyText1,
+                  style: Theme.of(context).primaryTextTheme.bodyText2,
                 ),
               ],
             )
@@ -43,7 +43,11 @@ class TransactionList extends StatelessWidget {
                       Container(
                         child: Text(
                           '\u20B9 ${transactions[index].amount.toStringAsFixed(2)}',
-                          style: Theme.of(context).primaryTextTheme.bodyText1,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         margin: EdgeInsets.symmetric(
                           horizontal: 10,

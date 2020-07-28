@@ -12,6 +12,14 @@ class NewTransaction extends StatefulWidget {
 class _NewTransactionState extends State<NewTransaction> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
+  final FocusNode _titleFocus = FocusNode();
+  final FocusNode _amountFocus = FocusNode();
+
+  void _focusNodeChange(
+      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
+  }
 
   void submitData() {
     final enteredTitle = titleController.text;
@@ -36,13 +44,20 @@ class _NewTransactionState extends State<NewTransaction> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             TextField(
+              focusNode: _titleFocus,
+              autofocus: true,
+              textInputAction: TextInputAction.next,
               controller: titleController,
               cursorColor: Theme.of(context).primaryColor,
               decoration: InputDecoration(
                 labelText: 'Title',
               ),
+              onSubmitted: (_) {
+                _focusNodeChange(context, _titleFocus, _amountFocus);
+              },
             ),
             TextField(
+              focusNode: _amountFocus,
               keyboardType: TextInputType.number,
               controller: amountController,
               cursorColor: Theme.of(context).accentColor,
