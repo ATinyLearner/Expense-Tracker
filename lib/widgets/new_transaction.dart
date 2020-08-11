@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addTx;
@@ -12,8 +13,10 @@ class NewTransaction extends StatefulWidget {
 class _NewTransactionState extends State<NewTransaction> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
+  DateTime _selectedDate;
   final FocusNode _titleFocus = FocusNode();
   final FocusNode _amountFocus = FocusNode();
+  final FocusNode _dateTimeFocus = FocusNode();
 
   void _focusNodeChange(
       BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
@@ -21,15 +24,33 @@ class _NewTransactionState extends State<NewTransaction> {
     FocusScope.of(context).requestFocus(nextFocus);
   }
 
-  void submitData() {
+  void _displayDatePicker() {
+    showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2019),
+            lastDate: DateTime.now())
+        .then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      } else {
+        setState(() {
+          _selectedDate = pickedDate;
+        });
+      }
+    });
+  }
+
+  void _submitData() {
     final enteredTitle = titleController.text;
     final enteredAmount = double.parse(amountController.text);
-    if (enteredTitle.isEmpty || enteredAmount <= 0) {
+    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) {
       return;
     }
     widget.addTx(
       enteredTitle,
       enteredAmount,
+      _selectedDate,
     );
     //This is used to close the current screen!
     Navigator.pop(context);
@@ -65,17 +86,40 @@ class _NewTransactionState extends State<NewTransaction> {
                 labelText: 'Amount',
               ),
               onSubmitted: (_) {
-                submitData();
+                _submitData();
               },
             ),
-            FlatButton(
+            Container(
+              height: 70,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      _selectedDate == null
+                          ? 'Date'
+                          : DateFormat.yMd().format(_selectedDate),
+                    ),
+                  ),
+                  FlatButton(
+                    textColor: Theme.of(context).accentColor,
+                    onPressed: _displayDatePicker,
+                    child: Text(
+                      'Choose Date',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            RaisedButton(
+              color: Theme.of(context).primaryColor,
               onPressed: () {
-                submitData();
+                _submitData();
               },
               child: Text(
                 'ADD',
                 style: TextStyle(
-                  color: Theme.of(context).primaryColor,
+                  color: Colors.white,
                 ),
               ),
             ),
