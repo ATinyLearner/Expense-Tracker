@@ -1,11 +1,20 @@
 import 'package:expense_tracker/widgets/new_transaction.dart';
 import 'package:expense_tracker/widgets/transaction_list.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './models/transaction.dart';
 import 'package:flutter/material.dart';
 import './widgets/chart.dart';
 
 void main() {
+  //**This are used to lock app in portrait mode
+//  WidgetsFlutterBinding.ensureInitialized();
+//  SystemChrome.setPreferredOrientations(
+//    [
+//      DeviceOrientation.portraitUp,
+//      DeviceOrientation.portraitDown,
+//    ],
+//  );
   runApp(MyApp());
 }
 
@@ -76,30 +85,47 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              _startAddNewTransaction(context);
-            },
-          ),
-        ],
-        centerTitle: true,
-        title: Text(
-          'Expense Tracker',
-          style: Theme.of(context).primaryTextTheme.headline1,
+    final statusBar = AppBar(
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {
+            _startAddNewTransaction(context);
+          },
         ),
+      ],
+      centerTitle: true,
+      title: Text(
+        'Expense Tracker',
+        style: Theme.of(context).primaryTextTheme.headline1,
       ),
+    );
+    return Scaffold(
+      appBar: statusBar,
       body: SingleChildScrollView(
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Chart(_recentTransactions),
-            TransactionList(
-              _userTransactions,
-              _deleteTransaction,
+            Row(
+              children: [
+                Text('Show Chart'),
+                Switch(value: null, onChanged: () {}),
+              ],
+            ),
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      statusBar.preferredSize.height) *
+                  .3,
+              child: Chart(_recentTransactions),
+            ),
+            Container(
+              height: (MediaQuery.of(context).size.height -
+                      statusBar.preferredSize.height) *
+                  .7,
+              child: TransactionList(
+                _userTransactions,
+                _deleteTransaction,
+              ),
             ),
           ],
         ),
