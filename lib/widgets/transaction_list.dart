@@ -13,31 +13,33 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transactions.isEmpty
-        ? Column(
-            children: <Widget>[
-              Text(
-                'It is empty.',
-                style: Theme.of(context).primaryTextTheme.bodyText2,
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Container(
-                height: 200,
-                child: Image.asset(
-                  'images/box.png',
-                  fit: BoxFit.cover,
+        ? LayoutBuilder(builder: (ctx, constraints) {
+            return Column(
+              children: <Widget>[
+                Text(
+                  'It is empty.',
+                  style: Theme.of(context).primaryTextTheme.bodyText2,
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                'Add some Transaction!',
-                style: Theme.of(context).primaryTextTheme.bodyText2,
-              ),
-            ],
-          )
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  height: constraints.maxHeight * .6,
+                  child: Image.asset(
+                    'images/box.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  'Add some Transaction!',
+                  style: Theme.of(context).primaryTextTheme.bodyText2,
+                ),
+              ],
+            );
+          })
         : ListView.builder(
             itemBuilder: (ctx, index) {
               return Card(

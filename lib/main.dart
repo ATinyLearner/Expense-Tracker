@@ -1,6 +1,5 @@
 import 'package:expense_tracker/widgets/new_transaction.dart';
 import 'package:expense_tracker/widgets/transaction_list.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './models/transaction.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  bool _showChart = false;
   List<Transaction> get _recentTransactions {
     //tx represents transaction
     return _userTransactions.where((tx) {
@@ -85,6 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final statusBar = AppBar(
       actions: <Widget>[
         IconButton(
@@ -100,33 +102,52 @@ class _MyHomePageState extends State<MyHomePage> {
         style: Theme.of(context).primaryTextTheme.headline1,
       ),
     );
+    final varTxListWidget = Container(
+      height: (MediaQuery.of(context).size.height -
+              statusBar.preferredSize.height) *
+          .7,
+      child: TransactionList(
+        _userTransactions,
+        _deleteTransaction,
+      ),
+    );
     return Scaffold(
       appBar: statusBar,
       body: SingleChildScrollView(
         child: Column(
           //mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Row(
-              children: [
-                Text('Show Chart'),
-                Switch(value: null, onChanged: () {}),
-              ],
-            ),
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      statusBar.preferredSize.height) *
-                  .3,
-              child: Chart(_recentTransactions),
-            ),
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      statusBar.preferredSize.height) *
-                  .7,
-              child: TransactionList(
-                _userTransactions,
-                _deleteTransaction,
+            if (_isLandscape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Show Chart'),
+                  Switch(
+                      value: _showChart,
+                      onChanged: (value) {
+                        setState(() {
+                          _showChart = value;
+                        });
+                      }),
+                ],
               ),
-            ),
+            if (!_isLandscape)
+              Container(
+                height: (MediaQuery.of(context).size.height -
+                        statusBar.preferredSize.height) *
+                    .3,
+                child: Chart(_recentTransactions),
+              ),
+            if (!_isLandscape) varTxListWidget,
+            if (_isLandscape)
+              _showChart
+                  ? Container(
+                      height: (MediaQuery.of(context).size.height -
+                              statusBar.preferredSize.height) *
+                          .7,
+                      child: Chart(_recentTransactions),
+                    )
+                  : varTxListWidget,
           ],
         ),
       ),

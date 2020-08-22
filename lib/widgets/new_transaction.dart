@@ -60,70 +60,80 @@ class _NewTransactionState extends State<NewTransaction> {
   Widget build(BuildContext context) {
     return Card(
       child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            TextField(
-              focusNode: _titleFocus,
-              autofocus: true,
-              textInputAction: TextInputAction.next,
-              controller: titleController,
-              cursorColor: Theme.of(context).primaryColor,
-              decoration: InputDecoration(
-                labelText: 'Title',
+        padding: EdgeInsets.only(
+          top: 10,
+          left: 10,
+          right: 10,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              TextField(
+                focusNode: _titleFocus,
+                autofocus: true,
+                textInputAction: TextInputAction.next,
+                controller: titleController,
+                cursorColor: Theme.of(context).primaryColor,
+                decoration: InputDecoration(
+                  labelText: 'Title',
+                ),
+                onSubmitted: (_) {
+                  _focusNodeChange(context, _titleFocus, _amountFocus);
+                },
               ),
-              onSubmitted: (_) {
-                _focusNodeChange(context, _titleFocus, _amountFocus);
-              },
-            ),
-            TextField(
-              focusNode: _amountFocus,
-              keyboardType: TextInputType.number,
-              controller: amountController,
-              cursorColor: Theme.of(context).accentColor,
-              decoration: InputDecoration(
-                labelText: 'Amount',
+              TextField(
+                focusNode: _amountFocus,
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                controller: amountController,
+                cursorColor: Theme.of(context).accentColor,
+                decoration: InputDecoration(
+                  labelText: 'Amount',
+                ),
+                onSubmitted: (_) {
+                  _focusNodeChange(context, _amountFocus, _dateTimeFocus);
+                  _displayDatePicker();
+                },
               ),
-              onSubmitted: (_) {
-                _submitData();
-              },
-            ),
-            Container(
-              height: 70,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      _selectedDate == null
-                          ? 'Date'
-                          : DateFormat.yMd().format(_selectedDate),
+              Container(
+                height: 70,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        _selectedDate == null
+                            ? 'Date'
+                            : DateFormat.yMd().format(_selectedDate),
+                      ),
                     ),
-                  ),
-                  FlatButton(
-                    textColor: Theme.of(context).accentColor,
-                    onPressed: _displayDatePicker,
-                    child: Text(
-                      'Choose Date',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            RaisedButton(
-              color: Theme.of(context).primaryColor,
-              onPressed: () {
-                _submitData();
-              },
-              child: Text(
-                'ADD',
-                style: TextStyle(
-                  color: Colors.white,
+                    FlatButton(
+                      focusNode: _dateTimeFocus,
+                      textColor: Theme.of(context).accentColor,
+                      onPressed: _displayDatePicker,
+                      child: Text(
+                        'Choose Date',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  ],
                 ),
               ),
-            ),
-          ],
+              RaisedButton(
+                color: Theme.of(context).primaryColor,
+                onPressed: () {
+                  _submitData();
+                },
+                child: Text(
+                  'ADD',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
